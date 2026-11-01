@@ -1,6 +1,7 @@
 // Minesweeper.tsx — Classic 9×9 beginner board with Win98 UI
 import { useState, useCallback, useEffect } from "react";
 import { useAchievementStore } from "../../os/store/achievementStore";
+import { playClickSound, playExplosionSound, playDingSound } from "../../os/sound";
 import styles from "./Minesweeper.module.css";
 
 const ROWS = 9, COLS = 9, MINES = 10;
@@ -88,16 +89,19 @@ export default function Minesweeper({ windowId: _ }: { windowId: string }) {
       if (cell.revealed || cell.flagged) return b;
       if (cell.mine) {
         // Lose: reveal all mines
+        playExplosionSound();
         const lost = b.map((row) => row.map((cell) => ({ ...cell, revealed: cell.mine ? true : cell.revealed })));
         setPhase("lost");
         setFace("😵");
         unlock("minesweeper-names", "💣 Stepped on a Mine (skill issue)");
         return lost;
       }
+      playClickSound();
       const next = reveal(b, r, c);
       // Win check
       const revealed = next.flat().filter((c) => c.revealed && !c.mine).length;
       if (revealed === ROWS * COLS - MINES) {
+        playDingSound();
         setPhase("won");
         setFace("😎");
         if (seconds < 10) unlock("minesweeper-names", "⚡ Minesweeper Speedrun");

@@ -95,5 +95,14 @@ export const APP_REGISTRY: Record<string, AppDefinition> = {
     singleton: true,
     component: lazy(() => import("../apps/display/DisplayProperties")),
   },
+  run: {
+    id: "run",
+    title: "Run",
+    icon: "/icons/run.png",
+    defaultSize: { w: 380, h: 175 },
+    minSize: { w: 340, h: 160 },
+    singleton: true,
+    component: lazy(() => import("../apps/run/RunDialog")),
+  },
 };
 

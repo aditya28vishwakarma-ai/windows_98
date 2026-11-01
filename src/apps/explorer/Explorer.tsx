@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useWindowStore } from "../../os/store/windowStore";
 import { useAchievementStore } from "../../os/store/achievementStore";
+import { showWin98Alert, showWin98Confirm } from "../../os/store/dialogStore";
+import { playClickSound, playRecycleSound } from "../../os/sound";
 import { APP_REGISTRY } from "../../os/registry";
 import styles from "./Explorer.module.css";
 
@@ -102,6 +104,7 @@ export default function Explorer({ windowId: _ }: { windowId: string }) {
   const pathLabel = currentPath === "root" ? "Desktop" : currentPath.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
   const navigate = (path: string) => {
+    playClickSound();
     const newHistory = [...pathHistory.slice(0, historyIndex + 1), path];
     setPathHistory(newHistory);
     setHistoryIndex(newHistory.length - 1);
@@ -111,6 +114,7 @@ export default function Explorer({ windowId: _ }: { windowId: string }) {
 
   const goBack = () => {
     if (historyIndex > 0) {
+      playClickSound();
       setHistoryIndex(historyIndex - 1);
       setCurrentPath(pathHistory[historyIndex - 1]);
     }
@@ -118,26 +122,37 @@ export default function Explorer({ windowId: _ }: { windowId: string }) {
 
   const goForward = () => {
     if (historyIndex < pathHistory.length - 1) {
+      playClickSound();
       setHistoryIndex(historyIndex + 1);
       setCurrentPath(pathHistory[historyIndex + 1]);
     }
   };
 
   const openItem = (item: FolderItem) => {
+    playClickSound();
     if (item.type === "folder") {
       if (TREE[item.path]) {
         navigate(item.path);
       } else {
         // Special folders
         if (item.special === "floppy") {
-          alert("A:\\ is not accessible.\n\nThe device is not ready.\n\n(Chintu bent the floppy disc. Again.)");
+          showWin98Alert(
+            "A:\\ is not accessible.\n\nThe device is not ready.\n\n(Chintu bent the floppy disc. Again.)",
+            "3½ Floppy (A:)",
+            "error"
+          );
         } else if (item.special === "control") {
-          alert("Control Panel\n\nAll settings are optimal.\n\nPlease do not change anything.\nLast time Anil changed something, Minesweeper disappeared for a week.");
+          openWindow("display", "Display Properties", "/icons/settings.png", { w: 400, h: 460 });
         } else if (item.special === "recycle") {
+          playRecycleSound();
           unlock("recycle-latent", "🗑️ Recycle Bin Opened");
           navigate("recycle-bin");
         } else {
-          alert(`${item.name}\n\nFolder is empty or access denied.\n\n(Chintu may have reorganised things.)`)
+          showWin98Alert(
+            `${item.name}\n\nFolder is empty or access denied.\n\n(Chintu may have reorganised things.)`,
+            item.name,
+            "warning"
+          );
         }
       }
       return;
@@ -146,33 +161,41 @@ export default function Explorer({ windowId: _ }: { windowId: string }) {
     // File open
     if (item.special === "free-ram") {
       unlock("free-ram", "⬇️ Free RAM Download");
-      const dialog = document.createElement("div");
-      document.body.appendChild(dialog);
-      alert("Downloading 64 MB RAM...\n[████████████████████] 100%\nDone!\n\nYour computer now has 128 MB RAM.\nPlease restart for changes to take effect.\n\n(You are a genius.)");
-      document.body.removeChild(dialog);
+      showWin98Alert(
+        "Downloading 64 MB RAM...\n[████████████████████] 100%\nDone!\n\nYour computer now has 128 MB RAM.\nPlease restart for changes to take effect.\n\n(You are a genius.)",
+        "Free RAM Downloader",
+        "info"
+      );
       return;
     }
     if (item.special === "not-a-virus") {
       unlock("illegal-op", "💥 Illegal Operation");
-      alert("This program has performed an illegal operation and will be shut down.\n\nDetails:\nAnil caused an invalid page fault in module HAPPINESS.DLL\nat 0137:BADF00D\n\n(The program name is NOT_A_VIRUS.exe. We are not surprised.)");
+      showWin98Alert(
+        "This program has performed an illegal operation and will be shut down.\n\nDetails:\nAnil caused an invalid page fault in module HAPPINESS.DLL\nat 0137:BADF00D\n\n(The program name is NOT_A_VIRUS.exe. We are not surprised.)",
+        "NOT_A_VIRUS.exe",
+        "error"
+      );
       return;
     }
     if (item.special === "sleep-restore") {
-      alert("sleep.exe\n\nInsufficient resources to run this program.\n\nClose some applications and try again.\n(Anil has been trying for 4 years.)");
+      showWin98Alert(
+        "sleep.exe\n\nInsufficient resources to run this program.\n\nClose some applications and try again.\n(Anil has been trying for 4 years.)",
+        "sleep.exe",
+        "warning"
+      );
       return;
     }
     if (item.special === "do-not-open") {
-      let i = 0;
-      const chain = () => {
-        i++;
-        if (i <= 5) {
-          if (confirm(`Are you sure you want to open this? (${i}/5)`)) chain();
-        } else {
-          alert("Why did you open it.");
-          unlock("dos-commands", "🙈 Opened do_not_open.txt");
+      showWin98Confirm("Are you sure you want to open this? (1/2)", "do_not_open.txt").then((y1) => {
+        if (y1) {
+          showWin98Confirm("Are you REALLY sure you want to open this? (2/2)", "do_not_open.txt").then((y2) => {
+            if (y2) {
+              showWin98Alert("Why did you open it.", "do_not_open.txt", "warning");
+              unlock("dos-commands", "🙈 Opened do_not_open.txt");
+            }
+          });
         }
-      };
-      chain();
+      });
       return;
     }
 
@@ -185,11 +208,20 @@ export default function Explorer({ windowId: _ }: { windowId: string }) {
         special: fileData.special,
       });
     } else if (item.name.endsWith(".jpg") || item.name.endsWith(".bmp")) {
-      alert(`${item.name}\n\nImage Viewer is not installed.\n\nAnil's note: "Chintu installed something that deleted it."`)
+      const def = APP_REGISTRY["paint"];
+      openWindow("paint", `${item.name} - Paint`, def.icon, def.defaultSize);
     } else if (item.name.endsWith(".exe") || item.name.endsWith(".scr")) {
-      alert(`${item.name}\n\nThis program has performed an illegal operation and will be shut down.\n\nDetails: NOPE.DLL not found.`);
+      showWin98Alert(
+        `${item.name}\n\nThis program has performed an illegal operation and will be shut down.\n\nDetails: NOPE.DLL not found.`,
+        item.name,
+        "error"
+      );
     } else {
-      alert(`Cannot open ${item.name}.\n\nThere is no program associated with this file type.\n\nWould you like to open it in Notepad? (Anil does everything in Notepad.)`);
+      showWin98Alert(
+        `Cannot open ${item.name}.\n\nThere is no program associated with this file type.\n\nWould you like to open it in Notepad? (Anil does everything in Notepad.)`,
+        "Open With",
+        "warning"
+      );
     }
   };
 

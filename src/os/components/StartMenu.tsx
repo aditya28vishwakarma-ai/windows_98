@@ -1,6 +1,8 @@
 // StartMenu.tsx — hierarchical start menu with cascading submenus
 import { useState, useEffect, useRef } from "react";
 import { useWindowStore } from "../store/windowStore";
+import { showWin98Alert, showWin98Confirm } from "../store/dialogStore";
+import { playClickSound } from "../sound";
 import { APP_REGISTRY } from "../registry";
 import styles from "./StartMenu.module.css";
 
@@ -21,13 +23,26 @@ export default function StartMenu({ onClose }: Props) {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const openApp = (appId: string) => {
+    playClickSound();
     const def = APP_REGISTRY[appId];
     if (def) openWindow(appId, def.title, def.icon, def.defaultSize);
     onClose();
   };
 
   const items: MenuItem[] = [
-    { label: "Windows Update", icon: "/icons/ie.png", action: () => { alert("Windows Update\n\nError connecting to windowsupdate.microsoft.com\n\nHave you tried turning the modem off and on?"); onClose(); } },
+    {
+      label: "Windows Update",
+      icon: "/icons/ie.png",
+      action: () => {
+        playClickSound();
+        showWin98Alert(
+          "Windows Update\n\nError connecting to windowsupdate.microsoft.com\n\nHave you tried turning the modem off and on?",
+          "Windows Update",
+          "error"
+        );
+        onClose();
+      },
+    },
     { separator: true },
     {
       label: "Programs", icon: "/icons/programs.png", children: [
@@ -74,28 +89,59 @@ export default function StartMenu({ onClose }: Props) {
     },
     {
       label: "Settings", icon: "/icons/settings.png", children: [
-        { label: "Control Panel", action: () => { alert("Control Panel\n\nAll settings are working perfectly.\n(They are not.)"); onClose(); } },
-        { label: "Taskbar & Start Menu...", action: onClose },
+        { label: "Control Panel", action: () => {
+          showWin98Alert("Control Panel\n\nAll settings are working properly.\n(They are not.)", "Control Panel", "info");
+          onClose();
+        }},
+        { label: "Display...", action: () => openApp("display") },
       ],
     },
     {
       label: "Find", icon: "/icons/find.png", children: [
-        { label: "Files or Folders...", action: () => { alert("Search not available.\n\nPlease ask Chintu."); onClose(); } },
+        { label: "Files or Folders...", action: () => {
+          showWin98Alert("Search not available.\n\nPlease ask Chintu.", "Find", "info");
+          onClose();
+        }},
       ],
     },
-    { label: "Help", icon: "/icons/help.png", action: () => { alert("Windows 98 Help\n\nHelp is not available.\n\nIf you need help, restart the computer.\nIf that doesn't work, restart the computer again.\n- Anil"); onClose(); } },
-    { label: "Run…", icon: "/icons/run.png", action: () => {
-      const cmd = prompt("Type the name of a program, folder, document, or Internet resource, and Windows will open it for you.\n\nOpen:");
-      if (cmd?.toLowerCase().includes("cmd") || cmd?.toLowerCase().includes("dos")) openApp("dos");
-      else if (cmd) alert(`Cannot find '${cmd}'.\n\nMake sure you typed the name correctly, and then try again.\n\n(Or ask Chintu.)`);
-      onClose();
-    }},
+    {
+      label: "Help",
+      icon: "/icons/help.png",
+      action: () => {
+        showWin98Alert(
+          "Windows 98 Help\n\nHelp is not available.\n\nIf you need help, restart the computer.\nIf that doesn't work, restart the computer again.\n- Anil",
+          "Windows 98 Help",
+          "info"
+        );
+        onClose();
+      },
+    },
+    {
+      label: "Run…",
+      icon: "/icons/run.png",
+      action: () => openApp("run"),
+    },
     { separator: true },
-    { label: "Log Off Anil…", icon: "/icons/logoff.png", action: () => { if (confirm("Are you sure you want to log off?")) window.location.reload(); onClose(); } },
-    { label: "Shut Down…", icon: "/icons/shutdown.png", action: () => {
-      onClose();
-      window.dispatchEvent(new CustomEvent("w98:shutdown"));
-    }},
+    {
+      label: "Log Off Anil…",
+      icon: "/icons/logoff.png",
+      action: () => {
+        onClose();
+        showWin98Confirm("Are you sure you want to log off Anil Verma?", "Log Off Windows").then((confirmed) => {
+          if (confirmed) window.location.reload();
+        });
+      },
+    },
+    {
+      label: "Shut Down…",
+      icon: "/icons/shutdown.png",
+      action: () => {
+        onClose();
+        showWin98Confirm("Are you sure you want to shut down your computer?", "Shut Down Windows").then((yes) => {
+          if (yes) window.dispatchEvent(new CustomEvent("w98:shutdown"));
+        });
+      },
+    },
   ];
 
   useEffect(() => {

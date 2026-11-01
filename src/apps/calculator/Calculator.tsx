@@ -1,6 +1,7 @@
 // Calculator.tsx — Win98 standard calculator with easter eggs
 import { useState } from "react";
 import { useAchievementStore } from "../../os/store/achievementStore";
+import { playClickSound, playChordSound } from "../../os/sound";
 import styles from "./Calculator.module.css";
 
 export default function Calculator({ windowId: _ }: { windowId: string }) {
@@ -14,6 +15,7 @@ export default function Calculator({ windowId: _ }: { windowId: string }) {
   const val = parseFloat(display) || 0;
 
   const press = (digit: string) => {
+    playClickSound();
     if (display === "Error") { setDisplay("0"); return; }
     if (justOp) { setDisplay(digit === "." ? "0." : digit); setJustOp(false); return; }
     if (display === "0" && digit !== ".") setDisplay(digit);
@@ -27,6 +29,7 @@ export default function Calculator({ windowId: _ }: { windowId: string }) {
   };
 
   const pressOp = (newOp: string) => {
+    playClickSound();
     if (newOp === "=") {
       if (op && pending !== null) {
         let result = 0;
@@ -35,6 +38,7 @@ export default function Calculator({ windowId: _ }: { windowId: string }) {
         if (op === "×") result = pending * val;
         if (op === "÷") {
           if (val === 0) {
+            playChordSound();
             unlock("calc-5318008", "➗ Division by Chintu");
             setDisplay("Cannot divide by zero. Nor by Chintu.");
             setOp(null); setPending(null); setJustOp(true); return;

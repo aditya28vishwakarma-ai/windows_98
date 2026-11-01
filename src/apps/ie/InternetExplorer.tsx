@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useAchievementStore } from "../../os/store/achievementStore";
 import { useWindowStore } from "../../os/store/windowStore";
+import { playClickSound } from "../../os/sound";
 import styles from "./InternetExplorer.module.css";
 
 const FAKE_SITES: Record<string, { title: string; html: string }> = {
@@ -452,6 +453,7 @@ export default function InternetExplorer({ windowId }: { windowId: string }) {
   }, [unlock]);
 
   const navigate = (url: string) => {
+    playClickSound();
     const normalised = url.startsWith("http") ? url : `http://${url}`;
     setAddress(normalised);
     setInputVal(normalised);

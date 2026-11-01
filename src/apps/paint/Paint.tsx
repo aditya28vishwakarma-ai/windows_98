@@ -1,6 +1,7 @@
 // Paint.tsx — MS Paint with tools: pencil, fill, eraser, line, rect, ellipse, colour palette
 import { useRef, useState, useEffect, useCallback } from "react";
 import { useAchievementStore } from "../../os/store/achievementStore";
+import { playClickSound } from "../../os/sound";
 import styles from "./Paint.module.css";
 
 type Tool = "pencil" | "eraser" | "fill" | "line" | "rect" | "ellipse" | "picker";
@@ -190,7 +191,10 @@ export default function Paint({ windowId: _ }: { windowId: string }) {
           <button
             key={t.id}
             className={`${styles.toolBtn} ${tool === t.id ? styles.toolBtnActive : ""}`}
-            onClick={() => setTool(t.id)}
+            onClick={() => {
+              playClickSound();
+              setTool(t.id);
+            }}
             title={t.label}
             aria-label={t.label}
           >

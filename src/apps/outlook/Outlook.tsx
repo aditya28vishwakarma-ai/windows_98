@@ -1,6 +1,7 @@
 // Outlook.tsx — 3-pane email client with seeded inbox
 import { useState } from "react";
 import { useAchievementStore } from "../../os/store/achievementStore";
+import { playClickSound, playChordSound } from "../../os/sound";
 import styles from "./Outlook.module.css";
 
 interface Email {
@@ -112,6 +113,7 @@ export default function Outlook({ windowId: _ }: { windowId: string }) {
   };
 
   const openEmail = (email: Email) => {
+    playClickSound();
     setSelectedEmail(email);
     markRead(email.id);
 
@@ -120,6 +122,7 @@ export default function Outlook({ windowId: _ }: { windowId: string }) {
       window.dispatchEvent(new CustomEvent("w98:confetti"));
     }
     if (email.special === "iloveyou-virus") {
+      playChordSound();
       unlock("fake-virus-iloveyou", "💌 ILOVEYOU Prank");
       setVirusActive(true);
       setTimeout(() => setVirusActive(false), 4000);

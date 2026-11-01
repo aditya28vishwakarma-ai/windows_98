@@ -2,6 +2,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useWindowStore } from "../../os/store/windowStore";
 import { useAchievementStore } from "../../os/store/achievementStore";
+import { showWin98Alert, showWin98Confirm } from "../../os/store/dialogStore";
+import { playClickSound } from "../../os/sound";
 import { writeFile } from "../../fs/vfs";
 import styles from "./Notepad.module.css";
 
@@ -54,8 +56,11 @@ export default function Notepad({ windowId }: Props) {
     }
   };
 
-  const handleNew = () => {
-    if (dirty && !confirm("The text has been changed.\nDo you want to save the changes?")) return;
+  const handleNew = async () => {
+    if (dirty) {
+      const ok = await showWin98Confirm("The text has been changed.\nDo you want to discard changes?", "Notepad");
+      if (!ok) return;
+    }
     setText("");
     setFilename("Untitled");
     setDirty(false);
@@ -67,6 +72,7 @@ export default function Notepad({ windowId }: Props) {
     writeFile(path, text);
     setDirty(false);
     setTitle(windowId, `${filename} - Notepad`);
+    showWin98Alert(`File saved to ${path}`, "Notepad", "info");
   };
 
   const handleSaveAs = () => {
@@ -77,6 +83,7 @@ export default function Notepad({ windowId }: Props) {
       writeFile(path, text);
       setDirty(false);
       setTitle(windowId, `${name} - Notepad`);
+      showWin98Alert(`File saved as ${path}`, "Notepad", "info");
     }
   };
 
@@ -89,7 +96,7 @@ export default function Notepad({ windowId }: Props) {
             label: "File",
             items: [
               { label: "New", action: handleNew },
-              { label: "Open...", action: () => alert("Open dialog coming soon.\nUse the file explorer.") },
+              { label: "Open...", action: () => showWin98Alert("Open dialog coming soon.\nUse My Computer to open files.", "Notepad", "info") },
               { label: "Save", action: handleSave },
               { label: "Save As...", action: handleSaveAs },
               null,
@@ -112,22 +119,31 @@ export default function Notepad({ windowId }: Props) {
           {
             label: "Search",
             items: [
-              { label: "Find...", action: () => { const q = prompt("Find:"); if (q) { const i = text.indexOf(q); if (i === -1) alert(`"${q}" not found.`); } } },
+              {
+                label: "Find...",
+                action: () => {
+                  const q = prompt("Find:");
+                  if (q) {
+                    const i = text.indexOf(q);
+                    if (i === -1) showWin98Alert(`"${q}" not found.`, "Notepad", "warning");
+                  }
+                },
+              },
             ],
           },
           {
             label: "Format",
             items: [
               { label: wordWrap ? "✓ Word Wrap" : "Word Wrap", action: () => setWordWrap((v) => !v) },
-              { label: "Font...", action: () => alert("Font dialog\n\nFont: Fixedsys\nSize: 12\n(This is the only font. It is perfect.)") },
+              { label: "Font...", action: () => showWin98Alert("Font: Fixedsys\nSize: 12\n\n(This is the only font. It is perfect.)", "Font", "info") },
             ],
           },
           {
             label: "Help",
             items: [
-              { label: "Help Topics", action: () => alert("Notepad Help\n\nNotepad is a basic text editor.\nIt edits text.\nGoodbye.") },
+              { label: "Help Topics", action: () => showWin98Alert("Notepad Help\n\nNotepad is a basic text editor.\nIt edits text.\nGoodbye.", "Notepad Help", "info") },
               null,
-              { label: "About Notepad", action: () => alert("Notepad\nWindows 98\n\nThis copy of Notepad is licensed to:\nAnil Verma, Sector 6, Bhilai\n\n(Originally typed by Chintu, who then denied it.)") },
+              { label: "About Notepad", action: () => showWin98Alert("Notepad\nWindows 98\n\nThis copy of Notepad is licensed to:\nAnil Verma, Sector 6, Bhilai\n\n(Originally typed by Chintu, who then denied it.)", "About Notepad", "info") },
             ],
           },
         ].map((menu) => (
@@ -176,7 +192,10 @@ function MenuButton({ label, items }: MenuBtnProps) {
     <div ref={ref} style={{ position: "relative" }}>
       <button
         className={styles.menuBtn}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          playClickSound();
+          setOpen((v) => !v);
+        }}
         onMouseEnter={() => open && setOpen(true)}
       >
         {label}
@@ -190,7 +209,11 @@ function MenuButton({ label, items }: MenuBtnProps) {
               <button
                 key={item.label}
                 className="context-item"
-                onMouseDown={() => { item.action(); setOpen(false); }}
+                onMouseDown={() => {
+                  playClickSound();
+                  item.action();
+                  setOpen(false);
+                }}
               >
                 {item.label}
               </button>

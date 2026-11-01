@@ -1,6 +1,7 @@
 // Solitaire.tsx — Klondike solitaire (simplified but playable)
 import { useState, useCallback } from "react";
 import { useAchievementStore } from "../../os/store/achievementStore";
+import { playClickSound, playDingSound } from "../../os/sound";
 import styles from "./Solitaire.module.css";
 
 type Suit = "♠" | "♥" | "♦" | "♣";
@@ -50,6 +51,7 @@ export default function Solitaire({ windowId: _ }: { windowId: string }) {
 
   // Draw from stock
   const drawStock = () => {
+    playClickSound();
     setGame((g) => {
       if (g.stock.length === 0) {
         // flip waste back to stock
@@ -68,6 +70,7 @@ export default function Solitaire({ windowId: _ }: { windowId: string }) {
 
   const checkWin = useCallback((foundations: Card[][]) => {
     if (foundations.every((f) => f.length === 13)) {
+      playDingSound();
       setWon(true);
       unlock("solitaire-cascade", "🃏 Won Solitaire!");
     }

@@ -1,0 +1,78 @@
+/* RunDialog.module.css */
+.run {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  background: var(--w98-face);
+  height: 100%;
+  font-family: var(--w98-font);
+  font-size: 11px;
+  gap: 12px;
+}
+
+.topRow {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+.desc {
+  line-height: 1.4;
+  color: #000;
+}
+
+.inputRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.label {
+  font-weight: bold;
+  width: 40px;
+}
+
+.input {
+  flex: 1;
+  font-family: var(--w98-font);
+  font-size: 11px;
+  padding: 2px 4px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.btn {
+  min-width: 68px;
+  height: 23px;
+  background: var(--w98-face);
+  border: none;
+  font-family: var(--w98-font);
+  font-size: 11px;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+  cursor: pointer;
+  padding: 2px 8px;
+}
+
+.btn:active {
+  box-shadow:
+    inset -1px -1px #fff,
+    inset 1px 1px #808080,
+    inset -2px -2px #dfdfdf,
+    inset 2px 2px #000;
+}
