@@ -2,6 +2,7 @@
 import { useRef, useCallback, useEffect, type ReactNode } from "react";
 import { useWindowStore, type WindowInstance, type WindowRect } from "../store/windowStore";
 import { useAchievementStore } from "../store/achievementStore";
+import { playClickSound } from "../sound";
 import styles from "./Window.module.css";
 
 interface Props {
@@ -16,7 +17,10 @@ export default function Window({ win, children }: Props) {
   const { closeWindow, minimizeWindow, maximizeWindow, restoreWindow, focusWindow, setRect } =
     useWindowStore();
   const unlockAchievement = useAchievementStore((s) => s.unlock);
-  const windowCount = useWindowStore((s) => s.windows.length);
+  const windows = useWindowStore((s) => s.windows);
+  const windowCount = windows.length;
+  const maxZ = Math.max(...windows.filter((w) => w.state !== "minimized").map((w) => w.zIndex), 0);
+  const isActive = win.zIndex === maxZ;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
@@ -28,6 +32,7 @@ export default function Window({ win, children }: Props) {
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
+      if (!isActive) playClickSound();
       focusWindow(win.id);
 
       // BSOD easter egg: >15 windows
@@ -148,7 +153,7 @@ export default function Window({ win, children }: Props) {
   return (
     <div
       ref={containerRef}
-      className={styles.window}
+      className={`${styles.window} ${!isActive ? styles.inactive : ""}`}
       style={style}
       onMouseDown={handleMouseDown}
     >

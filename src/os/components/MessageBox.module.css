@@ -1,0 +1,129 @@
+/* MessageBox.module.css */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+}
+
+.box {
+  width: 380px;
+  max-width: 90vw;
+  background: var(--w98-face);
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf,
+    3px 3px 10px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+}
+
+.titleBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--w98-title-h);
+  padding: 0 3px;
+  background: linear-gradient(
+    to right,
+    var(--w98-title-active-start),
+    var(--w98-title-active-end)
+  );
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.closeBtn {
+  width: 16px;
+  height: 14px;
+  background: var(--w98-face);
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+  cursor: pointer;
+}
+
+.closeBtn:active {
+  box-shadow:
+    inset -1px -1px #fff,
+    inset 1px 1px #808080,
+    inset -2px -2px #dfdfdf,
+    inset 2px 2px #000;
+}
+
+.body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contentRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.iconWrap {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+}
+
+.message {
+  font-family: var(--w98-font);
+  font-size: 11px;
+  color: #000;
+  line-height: 1.4;
+  white-space: pre-line;
+  word-break: break-word;
+  user-select: text;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.button {
+  min-width: 75px;
+  height: 23px;
+  padding: 2px 12px;
+  font-family: var(--w98-font);
+  font-size: 11px;
+  background: var(--w98-face);
+  border: none;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+  cursor: pointer;
+}
+
+.button:focus {
+  outline: 1px dotted #000;
+  outline-offset: -3px;
+}
+
+.button:active {
+  box-shadow:
+    inset -1px -1px #fff,
+    inset 1px 1px #808080,
+    inset -2px -2px #dfdfdf,
+    inset 2px 2px #000;
+}

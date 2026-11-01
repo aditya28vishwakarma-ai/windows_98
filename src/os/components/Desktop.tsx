@@ -2,6 +2,9 @@
 import { useState, useRef, useCallback, useEffect, Suspense } from "react";
 import { useWindowStore } from "../store/windowStore";
 import { useAchievementStore } from "../store/achievementStore";
+import { useThemeStore } from "../store/themeStore";
+import { showWin98Alert } from "../store/dialogStore";
+import { playClickSound } from "../sound";
 import { APP_REGISTRY } from "../registry";
 import Window from "./Window";
 import styles from "./Desktop.module.css";
@@ -23,12 +26,17 @@ interface ContextMenu {
 export default function Desktop() {
   const { windows, openWindow } = useWindowStore();
   const unlock = useAchievementStore((s) => s.unlock);
+  const wallpaper = useThemeStore((s) => s.wallpaper);
   const [contextMenu, setContextMenu] = useState<ContextMenu | null>(null);
   const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
+  const [dragBox, setDragBox] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null);
+  const isDragging = useRef(false);
+  const dragStart = useRef({ x: 0, y: 0 });
   const desktopRef = useRef<HTMLDivElement>(null);
 
   const openApp = useCallback(
     (appId: string) => {
+      playClickSound();
       const def = APP_REGISTRY[appId];
       if (!def) return;
       openWindow(appId, def.title, def.icon, def.defaultSize);
@@ -80,7 +88,11 @@ export default function Desktop() {
       label: "Network Neighborhood",
       icon: "/icons/network.png",
       action: () => {
-        alert("Network Neighborhood\n\nNo other computers found.\n(Chintu unplugged the router again.)");
+        showWin98Alert(
+          "Network Neighborhood\n\nNo other computers found.\n(Chintu unplugged the router again.)",
+          "Network Neighborhood",
+          "warning"
+        );
       },
       x: 20, y: 420,
     },
@@ -106,7 +118,11 @@ P.S. Password hint for Anil's account: "name of the dog". The dog is called Tomm
       label: "Latent_Final_FINAL.ppt",
       icon: "/icons/ppt.png",
       action: () => {
-        alert("Microsoft PowerPoint is not installed.\n\nDid you try Notepad? Anil does everything in Notepad.");
+        showWin98Alert(
+          "Microsoft PowerPoint is not installed.\n\nDid you try Notepad? Anil does everything in Notepad.",
+          "Microsoft PowerPoint",
+          "warning"
+        );
       },
       x: 100, y: 100,
     },
@@ -119,6 +135,7 @@ P.S. Password hint for Anil's account: "name of the dog". The dog is called Tomm
 
   const onIconClick = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
+    playClickSound();
     setSelectedIcon(id);
   };
 
@@ -129,7 +146,43 @@ P.S. Password hint for Anil's account: "name of the dog". The dog is called Tomm
 
   const onContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
+    playClickSound();
     setContextMenu({ x: e.clientX, y: e.clientY });
+  };
+
+  // Rubber-band drag selection
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0 || e.target !== desktopRef.current) return;
+    isDragging.current = true;
+    dragStart.current = { x: e.clientX, y: e.clientY };
+    setDragBox(null);
+    setSelectedIcon(null);
+    setContextMenu(null);
+  };
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current) return;
+    const x1 = dragStart.current.x;
+    const y1 = dragStart.current.y;
+    const x2 = e.clientX;
+    const y2 = e.clientY;
+    setDragBox({ x1, y1, x2, y2 });
+
+    // Check collision with icons
+    const minX = Math.min(x1, x2);
+    const maxX = Math.max(x1, x2);
+    const minY = Math.min(y1, y2);
+    const maxY = Math.max(y1, y2);
+
+    const hit = desktopIcons.find(
+      (icon) => icon.x + 35 >= minX && icon.x <= maxX && icon.y + 35 >= minY && icon.y <= maxY
+    );
+    if (hit) setSelectedIcon(hit.id);
+  };
+
+  const onMouseUp = () => {
+    isDragging.current = false;
+    setDragBox(null);
   };
 
   // Ctrl+Z → undo close
@@ -147,13 +200,26 @@ P.S. Password hint for Anil's account: "name of the dog". The dog is called Tomm
     return () => window.removeEventListener("keydown", onKey);
   }, [unlock]);
 
+  const boxStyle = dragBox ? {
+    left: Math.min(dragBox.x1, dragBox.x2),
+    top: Math.min(dragBox.y1, dragBox.y2),
+    width: Math.abs(dragBox.x2 - dragBox.x1),
+    height: Math.abs(dragBox.y2 - dragBox.y1),
+  } : undefined;
+
   return (
     <div
       ref={desktopRef}
-      className={styles.desktop}
+      className={`${styles.desktop} wallpaper-${wallpaper}`}
       onClick={onDesktopClick}
       onContextMenu={onContextMenu}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
     >
+      {/* Rubberband selection box */}
+      {boxStyle && <div className="selection-box" style={boxStyle} />}
+
       {/* Desktop icons */}
       {desktopIcons.map((icon) => (
         <div
@@ -192,13 +258,20 @@ P.S. Password hint for Anil's account: "name of the dog". The dog is called Tomm
           x={contextMenu.x}
           y={contextMenu.y}
           onClose={() => setContextMenu(null)}
-          onNewFolder={() => { alert("New Folder created.\n(Anil will never find it.)"); setContextMenu(null); }}
+          onNewFolder={() => {
+            showWin98Alert("New Folder created.\n(Anil will never find it.)", "New Folder");
+            setContextMenu(null);
+          }}
+          onProperties={() => {
+            openApp("display");
+            setContextMenu(null);
+          }}
           onUndoDeleteEverything={() => {
             const icons = desktopRef.current?.querySelectorAll(`.${styles.desktopIcon}`);
             icons?.forEach((el) => { (el as HTMLElement).style.visibility = "hidden"; });
             setTimeout(() => {
               icons?.forEach((el) => { (el as HTMLElement).style.visibility = ""; });
-              alert("Phew.");
+              showWin98Alert("Phew. All desktop files restored.", "Undo Delete");
               unlock("context-undo", "🔁 Undo Delete Everything");
             }, 1000);
             setContextMenu(null);
@@ -214,11 +287,12 @@ interface CtxProps {
   x: number; y: number;
   onClose: () => void;
   onNewFolder: () => void;
+  onProperties: () => void;
   onUndoDeleteEverything: () => void;
   onRefresh: () => void;
 }
 
-function DesktopContextMenu({ x, y, onClose, onNewFolder, onUndoDeleteEverything, onRefresh }: CtxProps) {
+function DesktopContextMenu({ x, y, onClose, onNewFolder, onProperties, onUndoDeleteEverything, onRefresh }: CtxProps) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const close = (e: MouseEvent) => {
@@ -234,7 +308,7 @@ function DesktopContextMenu({ x, y, onClose, onNewFolder, onUndoDeleteEverything
     null,
     { label: "New ▶", action: onNewFolder },
     null,
-    { label: "Properties", action: onClose },
+    { label: "Properties", action: onProperties },
     null,
     { label: "Undo Delete Everything", action: onUndoDeleteEverything },
   ];

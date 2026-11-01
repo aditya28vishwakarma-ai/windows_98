@@ -75,3 +75,43 @@ html, body, #root {
   outline-offset: -2px;
 }
 
+/* ── CRT Monitor Overlay ─────────────────────────────────────── */
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999990;
+  background:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.28) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 2px, 3px 100%;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.65);
+}
+
+/* ── Rubberband Selection Box ────────────────────────────────── */
+.selection-box {
+  position: absolute;
+  border: 1px dotted #ffffff;
+  background-color: rgba(0, 0, 128, 0.25);
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* ── Wallpaper Presets ───────────────────────────────────────── */
+.wallpaper-teal {
+  background-color: #008080 !important;
+}
+.wallpaper-navy {
+  background-color: #000080 !important;
+}
+.wallpaper-setup {
+  background-color: #0000aa !important;
+}
+.wallpaper-black {
+  background-color: #000000 !important;
+}
+.wallpaper-clouds {
+  background: linear-gradient(180deg, #1874cd 0%, #63b8ff 40%, #c6e2ff 75%, #ffffff 100%) !important;
+}
+
+

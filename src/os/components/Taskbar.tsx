@@ -3,12 +3,16 @@ import { useState, useEffect, useRef } from "react";
 import { useWindowStore } from "../store/windowStore";
 import { useAchievementStore } from "../store/achievementStore";
 import { APP_REGISTRY } from "../registry";
+import { isSoundEnabled, setSoundEnabled, getMasterVolume, setMasterVolume, playClickSound } from "../sound";
 import StartMenu from "./StartMenu";
 import styles from "./Taskbar.module.css";
 
 export default function Taskbar() {
   const { windows, focusWindow, minimizeWindow, restoreWindow } = useWindowStore();
   const [startOpen, setStartOpen] = useState(false);
+  const [volumeOpen, setVolumeOpen] = useState(false);
+  const [volume, setVolume] = useState(getMasterVolume());
+  const [muted, setMuted] = useState(!isSoundEnabled());
   const [time, setTime] = useState(new Date());
   const [clockClicks, setClockClicks] = useState(0);
   const [trayTooltip, setTrayTooltip] = useState("");
@@ -16,6 +20,19 @@ export default function Taskbar() {
   const achievementCount = useAchievementStore((s) => s.count);
   const unlock = useAchievementStore((s) => s.unlock);
   const startRef = useRef<HTMLButtonElement>(null);
+  const volRef = useRef<HTMLDivElement>(null);
+
+  // Close volume on click outside
+  useEffect(() => {
+    if (!volumeOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (volRef.current && !volRef.current.contains(e.target as Node)) {
+        setVolumeOpen(false);
+      }
+    };
+    window.addEventListener("mousedown", onClick);
+    return () => window.removeEventListener("mousedown", onClick);
+  }, [volumeOpen]);
 
   // Live clock
   useEffect(() => {
@@ -86,7 +103,10 @@ export default function Taskbar() {
         <button
           ref={startRef}
           className={`${styles.startBtn} ${startOpen ? styles.startBtnActive : ""}`}
-          onClick={() => setStartOpen((v) => !v)}
+          onClick={() => {
+            playClickSound();
+            setStartOpen((v) => !v);
+          }}
           aria-label="Start"
           aria-expanded={startOpen}
         >
@@ -109,6 +129,7 @@ export default function Taskbar() {
               title={btn.label}
               aria-label={btn.label}
               onClick={() => {
+                playClickSound();
                 const { openWindow } = useWindowStore.getState();
                 const def = APP_REGISTRY[btn.appId];
                 if (def) openWindow(btn.appId, def.title, def.icon, def.defaultSize);
@@ -128,6 +149,7 @@ export default function Taskbar() {
               key={win.id}
               className={`${styles.taskBtn} ${activeId === win.id && win.state !== "minimized" ? styles.taskBtnActive : ""}`}
               onClick={() => {
+                playClickSound();
                 if (win.state === "minimized") restoreWindow(win.id);
                 else if (activeId === win.id) minimizeWindow(win.id);
                 else focusWindow(win.id);
@@ -143,10 +165,58 @@ export default function Taskbar() {
         {/* System tray */}
         <div className={styles.tray}>
           {trayTooltip && <div className={styles.trayBalloon}>{trayTooltip}</div>}
-          <button className={styles.trayIcon} aria-label="Volume" title="Volume: on">
+
+          {/* Volume Popup */}
+          {volumeOpen && (
+            <div className={styles.volumePopup} ref={volRef}>
+              <div className={styles.volHeader}>Volume</div>
+              <div className={styles.volBody}>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  className={styles.volSlider}
+                  value={muted ? 0 : volume}
+                  disabled={muted}
+                  onChange={(e) => {
+                    const v = parseFloat(e.target.value);
+                    setVolume(v);
+                    setMasterVolume(v);
+                  }}
+                />
+                <label className={styles.muteLabel}>
+                  <input
+                    type="checkbox"
+                    checked={muted}
+                    onChange={(e) => {
+                      const isMuted = e.target.checked;
+                      setMuted(isMuted);
+                      setSoundEnabled(!isMuted);
+                    }}
+                  />
+                  <span>Mute</span>
+                </label>
+              </div>
+            </div>
+          )}
+
+          <button
+            className={styles.trayIcon}
+            aria-label="Volume"
+            title={`Volume: ${muted ? "Muted" : `${Math.round(volume * 100)}%`}`}
+            onClick={() => {
+              playClickSound();
+              setVolumeOpen((v) => !v);
+            }}
+          >
             <svg width="16" height="14" viewBox="0 0 16 14" fill="none">
-              <polygon points="1,4 5,4 9,1 9,13 5,10 1,10" fill="#000" />
-              <text x="10" y="10" fontSize="8" fill="#000">))))</text>
+              <polygon points="1,4 5,4 9,1 9,13 5,10 1,10" fill={muted ? "#808080" : "#000"} />
+              {!muted ? (
+                <text x="10" y="10" fontSize="8" fill="#000">))))</text>
+              ) : (
+                <line x1="10" y1="3" x2="15" y2="11" stroke="#cc0000" strokeWidth="1.5" />
+              )}
             </svg>
           </button>
           <button

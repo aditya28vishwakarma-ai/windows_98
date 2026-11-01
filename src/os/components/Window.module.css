@@ -52,6 +52,10 @@
   );
 }
 
+.window.inactive .titleText {
+  color: #d4d0c8;
+}
+
 .titleIcon {
   width: 16px;
   height: 16px;

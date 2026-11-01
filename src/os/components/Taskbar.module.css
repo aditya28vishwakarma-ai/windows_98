@@ -183,3 +183,60 @@
   white-space: nowrap;
 }
 
+/* ── Volume Popup ────────────────────────────────────────────── */
+.volumePopup {
+  position: absolute;
+  bottom: 28px;
+  right: 60px;
+  width: 90px;
+  background: var(--w98-face);
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf,
+    2px 2px 8px rgba(0,0,0,0.3);
+  padding: 4px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--w98-font);
+  font-size: 11px;
+}
+
+.volHeader {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 1px solid #808080;
+  padding-bottom: 2px;
+}
+
+.volBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.volSlider {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 18px;
+  height: 80px;
+  accent-color: #000080;
+  cursor: pointer;
+}
+
+.muteLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+

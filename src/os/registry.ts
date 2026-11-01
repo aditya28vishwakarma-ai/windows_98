@@ -86,5 +86,14 @@ export const APP_REGISTRY: Record<string, AppDefinition> = {
     minSize: { w: 400, h: 300 },
     component: lazy(() => import("../apps/dos/DosPrompt")),
   },
+  display: {
+    id: "display",
+    title: "Display Properties",
+    icon: "/icons/settings.png",
+    defaultSize: { w: 400, h: 460 },
+    minSize: { w: 380, h: 420 },
+    singleton: true,
+    component: lazy(() => import("../apps/display/DisplayProperties")),
+  },
 };
 

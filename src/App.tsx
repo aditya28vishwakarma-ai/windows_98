@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import BootScreen from "./os/components/BootScreen";
 import Desktop from "./os/components/Desktop";
 import Taskbar from "./os/components/Taskbar";
+import MessageBox from "./os/components/MessageBox";
+import { useThemeStore } from "./os/store/themeStore";
+import { playStartupSound } from "./os/sound";
 import { seedVFS } from "./fs/vfs";
 import "./styles/global.css";
 
@@ -14,6 +17,7 @@ const Y2K_ICONS = ["?", "!", "💾", "💻", "🐛", "⚠️"];
 export default function App() {
   const [phase, setPhase] = useState<AppPhase>("boot");
   const [y2kStep, setY2kStep] = useState(0);
+  const crtEnabled = useThemeStore((s) => s.crtEnabled);
 
   useEffect(() => {
     seedVFS();
@@ -71,7 +75,14 @@ export default function App() {
   }, []);
 
   if (phase === "boot") {
-    return <BootScreen onDone={() => setPhase("desktop")} />;
+    return (
+      <BootScreen
+        onDone={() => {
+          setPhase("desktop");
+          playStartupSound();
+        }}
+      />
+    );
   }
 
   if (phase === "bsod") {
@@ -176,6 +187,8 @@ export default function App() {
     <div id="desktop-root" style={{ width: "100%", height: "100%", position: "fixed", inset: 0 }}>
       <Desktop />
       <Taskbar />
+      <MessageBox />
+      {crtEnabled && <div className="crt-overlay" />}
     </div>
   );
 }
