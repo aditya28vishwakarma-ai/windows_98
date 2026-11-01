@@ -1,0 +1,111 @@
+/* Minesweeper.module.css */
+.ms {
+  background: var(--w98-face);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  user-select: none;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff, inset 2px 2px #000, inset -2px -2px #dfdfdf;
+}
+
+.led {
+  font-family: "Courier New", monospace;
+  font-size: 20px;
+  font-weight: bold;
+  color: #f00;
+  background: #000;
+  padding: 2px 4px;
+  letter-spacing: 4px;
+  min-width: 44px;
+  text-align: center;
+}
+
+.face {
+  width: 26px;
+  height: 26px;
+  font-size: 18px;
+  background: var(--w98-face);
+  border: none;
+  cursor: pointer;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.face:active {
+  box-shadow:
+    inset -1px -1px #fff,
+    inset 1px 1px #808080,
+    inset -2px -2px #dfdfdf,
+    inset 2px 2px #000;
+}
+
+/* ── Board ──────────────────────────────────────────────────── */
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff, inset 2px 2px #000, inset -2px -2px #dfdfdf;
+  padding: 3px;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 22px;
+  height: 22px;
+  background: var(--w98-face);
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+  flex-shrink: 0;
+}
+
+.cell.revealed {
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff;
+  background: var(--w98-face);
+  cursor: default;
+}
+
+.cell:active:not(.revealed) {
+  box-shadow: inset 1px 1px #808080;
+}
+
+/* ── Banner ─────────────────────────────────────────────────── */
+.banner {
+  text-align: center;
+  font-weight: bold;
+  padding: 4px;
+  background: var(--w98-select-bg);
+  color: var(--w98-select-text);
+}
+
+.lostBanner {
+  background: #800000;
+}
+

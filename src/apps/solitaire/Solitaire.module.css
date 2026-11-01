@@ -1,0 +1,124 @@
+/* Solitaire.module.css */
+.sol {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #008000;
+  padding: 8px;
+  gap: 8px;
+  position: relative;
+}
+
+.menu {
+  display: flex;
+  gap: 0;
+}
+
+.menuBtn {
+  padding: 1px 6px;
+  background: var(--w98-face);
+  border: none;
+  font-family: var(--w98-font);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.menuBtn:hover { background: var(--w98-select-bg); color: var(--w98-select-text); }
+
+.topRow {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.spacer { flex: 1; }
+
+.tableau {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  align-items: flex-start;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  min-height: 80px;
+}
+
+.cardSlot {
+  width: 60px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.emptySlot {
+  width: 60px;
+  height: 80px;
+  border: 1px dashed rgba(255,255,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.5);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.card {
+  width: 60px;
+  height: 80px;
+  background: #fff;
+  border: 1px solid #888;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 2px 4px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.faceDown {
+  background: #000080;
+  color: #000080;
+  cursor: default;
+  font-size: 28px;
+  align-items: center;
+  justify-content: center;
+}
+
+.red { color: #cc0000; }
+.black { color: #000; }
+
+.selectedCard {
+  box-shadow: 0 0 0 2px #ffff00, 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.winOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.winBox {
+  background: var(--w98-face);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  font-family: var(--w98-font);
+  box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+}
+

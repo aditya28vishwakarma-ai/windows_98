@@ -1,0 +1,126 @@
+/* Window.module.css */
+.window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--w98-face);
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+  min-width: 160px;
+  min-height: 100px;
+}
+
+/* ── Resize handles ─────────────────────────────────────────── */
+.resizeHandle {
+  position: absolute;
+  z-index: 10;
+}
+.handle-n  { top: 0; left: 4px; right: 4px; height: 4px; cursor: n-resize; }
+.handle-s  { bottom: 0; left: 4px; right: 4px; height: 4px; cursor: s-resize; }
+.handle-e  { right: 0; top: 4px; bottom: 4px; width: 4px; cursor: e-resize; }
+.handle-w  { left: 0; top: 4px; bottom: 4px; width: 4px; cursor: w-resize; }
+.handle-ne { top: 0; right: 0; width: 8px; height: 8px; cursor: ne-resize; }
+.handle-nw { top: 0; left: 0; width: 8px; height: 8px; cursor: nw-resize; }
+.handle-se { bottom: 0; right: 0; width: 8px; height: 8px; cursor: se-resize; }
+.handle-sw { bottom: 0; left: 0; width: 8px; height: 8px; cursor: sw-resize; }
+
+/* ── Title bar ──────────────────────────────────────────────── */
+.titleBar {
+  display: flex;
+  align-items: center;
+  height: var(--w98-title-h);
+  padding: 0 2px;
+  background: linear-gradient(
+    to right,
+    var(--w98-title-active-start),
+    var(--w98-title-active-end)
+  );
+  flex-shrink: 0;
+  cursor: default;
+  gap: 3px;
+}
+
+/* Inactive title bar — toggled by JS adding class .inactive */
+.window.inactive .titleBar {
+  background: linear-gradient(
+    to right,
+    var(--w98-title-inactive-start),
+    var(--w98-title-inactive-end)
+  );
+}
+
+.titleIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.titleText {
+  flex: 1;
+  color: var(--w98-title-text);
+  font-weight: bold;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+.titleButtons {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.titleBtn {
+  width: 16px;
+  height: 14px;
+  background: var(--w98-face);
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+}
+
+.titleBtn:active {
+  box-shadow:
+    inset -1px -1px #fff,
+    inset 1px 1px #808080,
+    inset -2px -2px #dfdfdf,
+    inset 2px 2px #000;
+}
+
+.titleBtn svg {
+  pointer-events: none;
+}
+
+.titleBtn svg line,
+.titleBtn svg rect,
+.titleBtn svg path {
+  stroke: #000;
+  fill: #000;
+}
+
+.closeBtn svg line {
+  stroke: #000;
+}
+
+/* ── Content area ───────────────────────────────────────────── */
+.content {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+

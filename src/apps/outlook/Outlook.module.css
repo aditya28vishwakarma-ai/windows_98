@@ -1,0 +1,147 @@
+/* Outlook.module.css */
+.outlook {
+  display: flex;
+  height: 100%;
+  position: relative;
+  font-family: var(--w98-font);
+  font-size: 11px;
+}
+
+/* Virus overlay */
+.virusOverlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.virusContent {
+  color: #f00;
+  font-family: var(--w98-mono);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* ── Folder pane ─────────────────────────────────────────────── */
+.folderPane {
+  width: 150px;
+  border-right: 2px solid var(--w98-shadow);
+  box-shadow: inset -1px 0 #fff;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.folderHeader {
+  background: var(--w98-face);
+  padding: 2px 4px;
+  font-weight: bold;
+  border-bottom: 1px solid var(--w98-shadow);
+}
+
+.folderItem {
+  padding: 2px 8px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.folderItem:hover { background: var(--w98-select-bg); color: var(--w98-select-text); }
+
+.folderSelected {
+  background: var(--w98-select-bg);
+  color: var(--w98-select-text);
+}
+
+.badge {
+  margin-left: auto;
+  background: #ff0;
+  color: #000;
+  font-size: 9px;
+  padding: 0 3px;
+  font-weight: bold;
+}
+
+/* ── Email list ──────────────────────────────────────────────── */
+.listPane {
+  width: 300px;
+  border-right: 2px solid var(--w98-shadow);
+  box-shadow: inset -1px 0 #fff;
+  flex-shrink: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.listHeader {
+  display: grid;
+  grid-template-columns: 100px 1fr 80px;
+  gap: 4px;
+  padding: 2px 4px;
+  font-weight: bold;
+  border-bottom: 1px solid var(--w98-shadow);
+  background: var(--w98-face);
+  flex-shrink: 0;
+}
+
+.emailRow {
+  display: grid;
+  grid-template-columns: 100px 1fr 80px;
+  gap: 4px;
+  padding: 2px 4px;
+  cursor: default;
+  overflow: hidden;
+}
+
+.emailRow > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emailRow:hover { background: var(--w98-select-bg); color: var(--w98-select-text); }
+
+.emailSelected { background: var(--w98-select-bg); color: var(--w98-select-text); }
+
+.unread { font-weight: bold; }
+
+.emptyFolder {
+  padding: 8px;
+  color: var(--w98-shadow);
+  font-style: italic;
+}
+
+/* ── Preview pane ────────────────────────────────────────────── */
+.previewPane {
+  flex: 1;
+  overflow: auto;
+}
+
+.emailView {
+  padding: 8px;
+}
+
+.emailHeader {
+  border-bottom: 1px solid var(--w98-shadow);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.emailBody {
+  font-family: var(--w98-mono);
+  font-size: 11px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.noPreview {
+  padding: 8px;
+  color: var(--w98-shadow);
+}
+

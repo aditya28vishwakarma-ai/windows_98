@@ -1,0 +1,116 @@
+/* Explorer.module.css */
+.explorer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: var(--w98-font);
+  font-size: 11px;
+  background: var(--w98-face);
+}
+
+.toolbar {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-bottom: 1px solid var(--w98-shadow);
+  flex-shrink: 0;
+}
+
+.toolBtn {
+  padding: 2px 8px;
+  background: var(--w98-face);
+  border: none;
+  font-family: var(--w98-font);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.toolBtn:disabled {
+  color: var(--w98-shadow);
+  cursor: default;
+}
+
+.toolBtn:not(:disabled):hover {
+  box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+}
+
+.addressBar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border-bottom: 1px solid var(--w98-shadow);
+  flex-shrink: 0;
+}
+
+.addressBar label {
+  white-space: nowrap;
+}
+
+.addressValue {
+  flex: 1;
+  padding: 2px 4px;
+  background: var(--w98-field);
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+  background: var(--w98-field);
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff;
+  padding: 8px;
+}
+
+.iconGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-content: flex-start;
+}
+
+.fileIcon {
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.fileIcon:hover { background: rgba(0,0,128,0.1); }
+
+.fileIcon:focus-visible { outline: 1px dotted #000; }
+
+.fileIcon img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+
+.fileIcon span {
+  font-size: 11px;
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+.selected {
+  background: var(--w98-select-bg);
+  color: var(--w98-select-text);
+}
+
+.selected img { opacity: 0.7; }
+
+.statusBar {
+  height: 18px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-top: 1px solid var(--w98-shadow);
+  box-shadow: inset 0 1px 0 #fff;
+  flex-shrink: 0;
+  gap: 8px;
+}
+

@@ -1,0 +1,101 @@
+/* Calculator.module.css */
+.calc {
+  background: var(--w98-face);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 220px;
+  user-select: none;
+}
+
+.displayRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.memIndicator {
+  width: 12px;
+  font-size: 9px;
+  text-align: center;
+}
+
+.display {
+  flex: 1;
+  height: 28px;
+  background: var(--w98-field);
+  text-align: right;
+  padding: 2px 6px;
+  font-family: var(--w98-mono);
+  font-size: 16px;
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff, inset 2px 2px #000, inset -2px -2px #dfdfdf;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.row {
+  display: flex;
+  gap: 3px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+}
+
+.ops {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  position: absolute;
+  right: 6px;
+  top: 60px;
+}
+
+/* Rebuild layout: grid + ops side by side */
+.calc {
+  position: relative;
+}
+
+.btn {
+  height: 24px;
+  background: var(--w98-face);
+  border: none;
+  cursor: pointer;
+  font-family: var(--w98-font);
+  font-size: 11px;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+}
+
+.btn:active {
+  box-shadow:
+    inset -1px -1px #fff,
+    inset 1px 1px #808080,
+    inset -2px -2px #dfdfdf,
+    inset 2px 2px #000;
+  padding-top: 2px;
+  padding-left: 2px;
+}
+
+.mem {
+  color: #800000;
+}
+
+.op {
+  /* operators look same but stand out slightly */
+}
+
+.eq {
+  background: var(--w98-face);
+}
+

@@ -1,0 +1,212 @@
+/* BootScreen.module.css */
+.screen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 99999;
+  overflow: hidden;
+  font-family: var(--w98-mono);
+  font-size: 12px;
+  color: #c0c0c0;
+}
+
+/* ── BIOS ───────────────────────────────────────────────────── */
+.bios {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.biosLine {
+  line-height: 1.4;
+  white-space: pre;
+}
+
+.cursor {
+  animation: blink 0.8s steps(1) infinite;
+  color: #c0c0c0;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Splash ─────────────────────────────────────────────────── */
+.splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 32px;
+  background: #000;
+}
+
+.splashLogo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.logoCloud {
+  width: 120px;
+  height: 80px;
+  background: radial-gradient(ellipse at 30% 60%, #4af 0%, #26c 40%, #000080 100%);
+  clip-path: polygon(10% 60%, 0% 100%, 100% 100%, 90% 60%, 75% 50%, 60% 40%, 45% 50%, 30% 40%, 15% 50%);
+}
+
+.logoText {
+  font-family: var(--w98-font);
+  font-size: 32px;
+  color: white;
+  letter-spacing: 2px;
+}
+
+.splashProgress {
+  width: 200px;
+  height: 6px;
+  background: #333;
+  position: relative;
+  overflow: hidden;
+}
+
+.splashBar {
+  position: absolute;
+  left: -60px;
+  top: 0;
+  width: 60px;
+  height: 100%;
+  background: #1084d0;
+  animation: slide 1.2s steps(6) infinite;
+}
+
+@keyframes slide {
+  from { left: -60px; }
+  to { left: 200px; }
+}
+
+/* ── ScanDisk ───────────────────────────────────────────────── */
+.scandisk {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--w98-face);
+  padding: 16px;
+  width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--w98-font);
+  font-size: 11px;
+  color: #000;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+}
+
+.scandiskTitle {
+  font-size: 18px;
+  font-weight: bold;
+  font-family: var(--w98-font);
+  color: #000080;
+  border-bottom: 1px solid #808080;
+  padding-bottom: 4px;
+}
+
+.progressOuter {
+  height: 14px;
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff;
+  background: #fff;
+  overflow: hidden;
+}
+
+.progressInner {
+  height: 100%;
+  background: #000080;
+  transition: width 50ms steps(1);
+}
+
+/* ── Login ──────────────────────────────────────────────────── */
+.loginOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--w98-desktop);
+}
+
+.loginBox {
+  background: var(--w98-face);
+  width: 360px;
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+}
+
+.loginTitle {
+  height: 18px;
+  background: linear-gradient(to right, #000080, #1084d0);
+  color: #fff;
+  font-size: 11px;
+  font-weight: bold;
+  font-family: var(--w98-font);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 6px;
+}
+
+.loginBody {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: var(--w98-font);
+  font-size: 11px;
+}
+
+.loginRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.formRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.formRow label {
+  width: 80px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.formRow input {
+  flex: 1;
+  font-family: var(--w98-font);
+  font-size: 11px;
+}
+
+.pwdError {
+  color: red;
+  font-size: 11px;
+  white-space: pre-line;
+}
+
+.loginButtons {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+

@@ -1,0 +1,34 @@
+/* tokens.css — single source of truth for all Win98 design tokens */
+:root {
+  /* Surfaces */
+  --w98-face:        #c0c0c0;
+  --w98-desktop:     #008080;
+  --w98-white:       #ffffff;
+  --w98-light:       #dfdfdf;
+  --w98-shadow:      #808080;
+  --w98-dark:        #000000;
+  --w98-field:       #ffffff;
+
+  /* Title bars */
+  --w98-title-active-start:   #000080;
+  --w98-title-active-end:     #1084d0;
+  --w98-title-inactive-start: #808080;
+  --w98-title-inactive-end:   #b5b5b5;
+  --w98-title-text:           #ffffff;
+
+  /* Selection / links / tooltip */
+  --w98-select-bg:   #000080;
+  --w98-select-text: #ffffff;
+  --w98-link:        #0000ff;
+  --w98-visited:     #800080;
+  --w98-tooltip:     #ffffe1;
+
+  /* Metrics */
+  --w98-taskbar-h:   28px;
+  --w98-title-h:     18px;
+  --w98-border:      2px;
+  --w98-font: "Pixelated MS Sans Serif", "MS Sans Serif", Tahoma, Arial, sans-serif;
+  --w98-font-size: 11px;
+  --w98-mono: "Fixedsys", "Lucida Console", "Courier New", monospace;
+}
+

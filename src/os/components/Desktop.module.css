@@ -1,0 +1,89 @@
+/* Desktop.module.css */
+.desktop {
+  position: fixed;
+  inset: 0;
+  bottom: var(--w98-taskbar-h);
+  background: var(--w98-desktop);
+  overflow: hidden;
+}
+
+.desktopIcon {
+  position: absolute;
+  width: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.desktopIcon:focus-visible {
+  outline: 1px dotted white;
+}
+
+.iconImg {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+
+.iconLabel {
+  color: white;
+  font-size: 11px;
+  text-align: center;
+  text-shadow: 1px 1px #000;
+  word-break: break-word;
+  max-width: 72px;
+  line-height: 1.2;
+}
+
+.selected .iconImg {
+  filter: brightness(0.5) saturate(2) sepia(1) hue-rotate(180deg);
+  opacity: 0.8;
+}
+
+.selected .iconLabel {
+  background: var(--w98-select-bg);
+  color: var(--w98-select-text);
+  text-shadow: none;
+}
+
+/* Context menu */
+:global(.context-menu) {
+  background: var(--w98-face);
+  box-shadow:
+    inset -1px -1px #000,
+    inset 1px 1px #fff,
+    inset -2px -2px #808080,
+    inset 2px 2px #dfdfdf;
+  min-width: 160px;
+  padding: 2px;
+  z-index: 9999;
+}
+
+:global(.context-item) {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 2px 20px;
+  text-align: left;
+  font-family: var(--w98-font);
+  font-size: 11px;
+  cursor: default;
+  color: var(--w98-dark);
+}
+
+:global(.context-item:hover) {
+  background: var(--w98-select-bg);
+  color: var(--w98-select-text);
+}
+
+:global(.context-separator) {
+  height: 1px;
+  background: var(--w98-shadow);
+  margin: 2px 0;
+  box-shadow: 0 1px 0 var(--w98-light);
+}
+

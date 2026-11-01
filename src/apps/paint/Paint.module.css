@@ -1,0 +1,129 @@
+/* Paint.module.css */
+.paint {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--w98-face);
+}
+
+.toolPanel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 4px;
+  border-bottom: 1px solid var(--w98-shadow);
+  flex-shrink: 0;
+}
+
+.toolBtn {
+  width: 26px;
+  height: 26px;
+  background: var(--w98-face);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset -1px -1px #000, inset 1px 1px #fff, inset -2px -2px #808080, inset 2px 2px #dfdfdf;
+}
+
+.toolBtnActive {
+  box-shadow: inset -1px -1px #fff, inset 1px 1px #808080, inset -2px -2px #dfdfdf, inset 2px 2px #000;
+}
+
+.toolSep {
+  width: 2px;
+  height: 24px;
+  box-shadow: inset 1px 0 #808080, inset -1px 0 #fff;
+  margin: 0 4px;
+}
+
+.swatches {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.colorSquare {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  box-shadow: inset 1px 1px #808080, inset -1px -1px #fff;
+  cursor: pointer;
+}
+
+.brushSizes {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.brushBtn {
+  width: 24px;
+  background: #000;
+  border: none;
+  cursor: pointer;
+  min-height: 4px;
+}
+
+.brushActive {
+  box-shadow: 0 0 0 2px #000080;
+}
+
+/* ── Canvas area ─────────────────────────────────────────────── */
+.canvasArea {
+  flex: 1;
+  overflow: auto;
+  background: #808080;
+  padding: 8px;
+}
+
+.canvasWrapper {
+  position: relative;
+  display: inline-block;
+  box-shadow: 2px 2px 0 #000;
+}
+
+.canvas {
+  display: block;
+  background: #fff;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* ── Colour palette ──────────────────────────────────────────── */
+.palette {
+  border-top: 1px solid var(--w98-shadow);
+  padding: 4px;
+  flex-shrink: 0;
+  background: var(--w98-face);
+}
+
+.paletteColors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  width: fit-content;
+}
+
+.paletteCell {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  box-shadow: inset -1px -1px #fff, inset 1px 1px #808080;
+}
+
+.paletteCell:hover {
+  box-shadow: inset -2px -2px #000, inset 2px 2px #fff;
+}
+
